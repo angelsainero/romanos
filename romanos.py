@@ -6,12 +6,14 @@ def convertir_en_romano(numero):
             - no es negativo
             - no es mayor que 3999
     Resultado es una cadena que contiene (I, V, X, L, C, D, M)
+
     Ideas para comprobar un entero:
             - (X) isdigit(): porque no aplica a cualquier cosa que no sea cadena
         - (V) convertir a int y si no se puede, error
         - (V) isinstance()
             - (V) type()
             - (X) isnumeric()
+
     Pasos:
         1. Validar la entrada
         2a. Si es válido: lo convierto
@@ -24,6 +26,19 @@ def convertir_en_romano(numero):
         return "El número introducido no es válido (debe ser positivo y menor que 4000)"
 
     # continuamos con la conversión
+    simbolos = {
+        "I": 1,
+        "V": 5,
+        "X": 10,
+        "L": 50,
+        "C": 100,
+        "D": 500,
+        "M": 1000
+    }
+
+    # Descomponer "numero" en unidades, decenas, centenas y unidades de millar
+    # opción 1: división entera + módulo en cascada
+    # opción 2: convertir en cadena y en función de la longitud y la posición obtener u,d,c y um
 
 print(convertir_en_romano("3a3"))
 print(convertir_en_romano(-3))
