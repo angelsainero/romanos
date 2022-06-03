@@ -41,6 +41,7 @@ def convertir_en_romano(numero):
         numero = resto
 
     resultado = ""
+
     for pos, factor in enumerate(factores):
         resultado = resultado + conversores[pos][factor]
 
@@ -81,22 +82,61 @@ def convertir_a_numero(romano):
         if anterior >= actual:
             resultado = resultado + actual
         else:
+            # antes de restar voy a ver si la resta es posible
+            # validando que no puedo restar si hay más de un orden
+            # de magnitud entre anterior y actual
+            #   3   2   1   0
+            # 10  10  10  10
+            # 1123 = 1*10^3 + 1*10^2 + 2*10^1 + 3*10^1 = 1000 + 100 + 20 + 3
+            # anterior < actual
+
+            # IV  ---   anterior=1,   actual=5         10 ---- 5
+            # IX  ---   anterior=1,   actual=10        10 ---- 10
+            # CM  ---   anterior=100, actual=1000    1000 ---- 1000
+
+            # IC  ---   anterior=1,   actual=100      10 ---- 100
+            # XM  ---   anterior=10,  actual=1000    100 ---- 1000
+
+            # I   ---   anterior=0,   actual=1         0 ---- 1
+            # X   ---   anterior=0,   actual=10        0 ---- 10
+
+            # actual - anterior*10 ---> si cero o negativo OK
+            #                      ---> si positivo KO
+
+            # IV
+            # anterior=0, actual=1 ----    0 <= 1 ////  1 - 0 > 0
+            # anterior=1, actual=5         0 <= 10 //// 10 > 0
+
+            # if (actual - anterior*10) > 0:
+            # if anterior > 0 and anterior*10 < actual:
+            # if anterior*10 > 0 and anterior*10 < actual:
+
+            # if anterior == 5 or anterior == 50 or anterior == 500:
+            if anterior in (5, 50, 500):
+                raise ValueError("No se puede restar un número múltiplo de 5")
+
+            if 0 < anterior*10 < actual:
+                raise ValueError("No se puede restar más de un orden de magnitud")
+
             resultado = resultado - anterior
             resultado = resultado + (actual - anterior)
 
         anterior = actual
     return resultado
 
-
-print(
-    convertir_a_numero("IV")
-)
-print(
-    convertir_a_numero("X")
-)
-print(
-    convertir_a_numero("MCXXIII")
-)
-print(
-    convertir_a_numero("IC")
-)
+if __name__ == '__main__':
+    # print(
+    #     convertir_a_numero("X")
+    # )
+    # print(
+    #     convertir_a_numero("MCXXIII")
+    # )
+    # print(
+    #     convertir_a_numero("IV")
+    # )
+    # print(
+    #     convertir_a_numero("IC")
+    # )
+    print(
+        convertir_a_numero("VX")
+    )
